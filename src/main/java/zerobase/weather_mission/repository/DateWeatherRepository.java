@@ -6,7 +6,6 @@ import zerobase.weather_mission.domain.DateWeather;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface DateWeatherRepository extends JpaRepository<DateWeather, LocalDate> {

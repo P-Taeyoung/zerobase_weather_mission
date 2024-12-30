@@ -1,6 +1,5 @@
 package zerobase.weather_mission.domain;
 
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 import lombok.*;
 
 import javax.persistence.Entity;
