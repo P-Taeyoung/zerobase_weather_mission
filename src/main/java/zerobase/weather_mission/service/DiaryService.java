@@ -5,11 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import zerobase.weather_mission.WeatherMissionApplication;
 import zerobase.weather_mission.domain.DateWeather;
 import zerobase.weather_mission.domain.Diary;
 import zerobase.weather_mission.repository.DateWeatherRepository;
@@ -37,9 +40,13 @@ public class DiaryService {
 
     private final DateWeatherRepository dateWeatherRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(WeatherMissionApplication.class);
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void createDiary(LocalDate localDate, String text) {
+        logger.info("createDiary");
         diaryRepository.save(Diary.setDiary(getDateWeather(localDate), text));
+        logger.info("createDiary finished");
     }
 
     private DateWeather getDateWeather(LocalDate localDate) {
@@ -107,6 +114,7 @@ public class DiaryService {
 
     @Scheduled(cron = "0 0 1 * * *")
     public void saveWeatherDate() {
+        logger.info("saveWeatherDate");
         dateWeatherRepository.save(getWeatherFromApi());
     }
 
@@ -127,6 +135,7 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public List<Diary> readDiary(LocalDate localDate) {
+        logger.debug("readDiary");
         return diaryRepository.findAllByDate(localDate);
     }
 
